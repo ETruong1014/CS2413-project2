@@ -142,6 +142,7 @@ bool myString::operator == (myString& B) {
 				same = false;
 				break;
 			}
+			i++;
 		}
 	}
 
@@ -151,7 +152,6 @@ bool myString::operator == (myString& B) {
 // comparison of myString A if less than myString B - return true or false
 bool myString::operator < (myString& B) {
 
-	// TODO
 	bool less = true;
 	int i = 0; //index of comparison
 
@@ -160,6 +160,7 @@ bool myString::operator < (myString& B) {
 			less = false;
 			break;
 		}
+		i++;
 	}
 	if (less) { //check if a word starts with the same letters as the other word, but not the same length
 		if (size >= B.size) {
@@ -180,6 +181,7 @@ bool myString::operator > (myString& B) {
 			greater = false;
 			break;
 		}
+		i++;
 	}
 	if (greater) { //check if a word starts with the same letters as the other word, but not the same length
 		if (size <= B.size) {
@@ -280,8 +282,6 @@ void bagOfWords::setSize(int i)
 // print the bag of words in dictionary format
 void bagOfWords::display()
 {
-
-	// TODO
 	cout << "Bag of Words: " << _size << endl;
 	for (int i = 0; i < _size; i++) {
 		cout << _words[i] << ": " << _frequencies[i] << endl;
@@ -333,8 +333,6 @@ void bagOfWords::sortWords()
 
 bagOfWords* bagOfWords::removeStopWords(myString* stopWords, int numStopWords)
 {
-
-	// TODO
 	bool found; //if stop word is found;
 	bagOfWords* bagWithoutStop = new bagOfWords(_size - numStopWords);
 
@@ -357,10 +355,8 @@ bagOfWords* bagOfWords::removeStopWords(myString* stopWords, int numStopWords)
 // to search for a given word in _words - returns 0 if not found, 1 if found
 int bagOfWords::binarySearchAndInsert (myString& wordToFind, int l, int r)
 {
-
 	if (r >= l) {
 		int m = l + (r - l) / 2; //midpoint of array
-
 		if (_words[m] == wordToFind) {
 			return 1; //word found
 		}
@@ -371,13 +367,13 @@ int bagOfWords::binarySearchAndInsert (myString& wordToFind, int l, int r)
 			return binarySearchAndInsert(wordToFind, m + 1, r);
 		}
 	}
+
 	return 0; //word not found
 }
 
 // method to add words to the bagOfWords object
 void bagOfWords::addWord(myString & newWord)
 {
-	// TODO
 	if (_size == 0) { //adding the first word
 		delete [] _words; //delete empty array
 		delete [] _frequencies; //delete empty array
@@ -389,7 +385,7 @@ void bagOfWords::addWord(myString & newWord)
 	}
 	else if (binarySearchAndInsert(newWord, 0, _size - 1) == 0) { //word not currently in the list
 		_size++;
-		myString* new_words = new myString[_size];
+		myString* new_words = new myString[_size]; //temporary new arrays
 		int* new_frequencies = new int[_size];
 		int insertIdx = 0;
 
@@ -413,7 +409,7 @@ void bagOfWords::addWord(myString & newWord)
 			}
 		}
 
-		delete [] _words;
+		delete [] _words; //deleting current arrays
 		delete [] _frequencies;
 
 		_words = new myString[_size];
@@ -423,14 +419,27 @@ void bagOfWords::addWord(myString & newWord)
 			_frequencies[i] = new_frequencies[i];
 		}
 
-		delete [] new_words;
+		delete [] new_words; //deleting temporary arrays
 		delete [] new_frequencies;
+	}
+	else if (binarySearchAndInsert(newWord, 0, _size - 1) == 1) { //word already in the list
+		for (int i = 0; i < _size; i++) { //find the word's index
+			if (newWord == _words[i]) {
+				_frequencies[i]++;
+				break;
+			}
+		}
 	}
 }
 
 // destructor
 bagOfWords::~bagOfWords() {
-	if (_words != NULL) delete [] _words;
+	if (_words != NULL) {
+		for (int i = 0; i < _size; i++) { //empty each char array in each myString
+			emptyString(_words[i].getWord(), _words[i].Size());
+		}
+		delete [] _words;
+	}
 	if (_frequencies != NULL) delete [] _frequencies;
 	_size = 0;
 }
@@ -462,7 +471,9 @@ int main () {
 	while (token != NULL)
 	{
 		tokenString = new myString (token); //create a myString object with the token
+		cout << *tokenString << endl;
 		(*myBag).addWord(*tokenString); //add token to myBag
+		cout << "word added" << endl;
 		token = getNextToken ();
 	}
 
