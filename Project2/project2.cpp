@@ -99,6 +99,7 @@ int myString::Size () {
 
 // overloading = operator - initialize object with an existing string
 myString& myString::operator = (char* B) {
+	//almost identical code to the non-default constructor using a char array parameter
 
 	int i = 0;
 	while (B[i] != '\0') {
@@ -116,6 +117,7 @@ myString& myString::operator = (char* B) {
 
 // overloading = operator - initialize object with an existing mystring object
 myString& myString::operator = (myString& B) {
+	//almost identical code to the non-default constructor using a myString paramenter
 
 	delete [] strArray;
 	strArray = NULL;
@@ -130,15 +132,15 @@ myString& myString::operator = (myString& B) {
 // checking if two myString objects are the same - return true or false
 bool myString::operator == (myString& B) {
 
-	bool same = true;
+	bool same = true; //value to determine if strings are the same
 	int i = 0; //index of comparison
 
-	if (size != B.size) {
+	if (size != B.size) { //if myStrings are different sizes, they cannot be the same
 		same = false;
 	}
 	else {
-		while (i < size) {
-			if (strArray[i] != B.strArray[i]) {
+		while (i < size) { //iterates through every character in the myStrings until the end or a difference is found
+			if (strArray[i] != B.strArray[i]) { //if a character doesn't match, the myStrings are different
 				same = false;
 				break;
 			}
@@ -151,18 +153,18 @@ bool myString::operator == (myString& B) {
 // comparison of myString A if less than myString B - return true or false
 bool myString::operator < (myString& B) {
 
-	bool less = true;
+	bool less = true; //value to determine if this myString is less than B
 	bool sameStart = true; //if a word starts with the same letters as the other
 	int i = 0; //index of comparison
 
-	while (i < size && i < B.size) {
-			if (strArray[i] != B.strArray[i]) {
+	while (i < size && i < B.size) { //iterates through letters of this and B until the end of one of the myStrings
+			if (strArray[i] != B.strArray[i]) { //if there is a letter difference, one must be less than the other
 				sameStart = false;
-				if (strArray[i] > B.strArray[i]) {
+				if (strArray[i] > B.strArray[i]) { //if the letter in this myString is greater than the letter in B, it is greater than B
 					less = false;
 					break;
 				}
-				else {
+				else { //if the letter in this myString is less than the letter in B, it is less than B
 					less = true;
 					break;
 				}
@@ -170,7 +172,7 @@ bool myString::operator < (myString& B) {
 			i++;
 		}
 	if (sameStart == true) { //check if a word that starts with the same letters as the other word is longer or shorter
-		if (size > B.size) {
+		if (size > B.size) { //if this myString is longer than B, it is greater than B
 			less = false;
 		}
 	}
@@ -180,18 +182,18 @@ bool myString::operator < (myString& B) {
 // comparison of myString A if greater than myString B - return true or false
 bool myString::operator > (myString& B) {
 
-	bool greater = true;
+	bool greater = true; //value to determine if this myString is greater than B
 	bool sameStart = true; //if a word starts with the same letters as the other
 	int i = 0; //index of comparison
 
-	while (i < size && i < B.size) {
-		if (strArray[i] != B.strArray[i]) {
+	while (i < size && i < B.size) { //iterates through letters of this and B until the end of one of the myStrings
+		if (strArray[i] != B.strArray[i]) { //if there is a letter difference, one must be greater than the other
 			sameStart = false;
-			if (strArray[i] < B.strArray[i]) {
+			if (strArray[i] < B.strArray[i]) { //if the letter in this myString is less than the letter in B, it is less than B
 				greater = false;
 				break;
 			}
-			else {
+			else { //if the letter in this myString is greater than the letter in B, it is greater than B
 				greater = true;
 				break;
 			}
@@ -199,7 +201,7 @@ bool myString::operator > (myString& B) {
 		i++;
 	}
 	if (sameStart == true) { //check if a word that starts with the same letters as the other word is longer or shorter
-		if (size < B.size) {
+		if (size < B.size) { //if this myString is shorter than B, it is less than B
 			greater = false;
 		}
 	}
@@ -297,32 +299,32 @@ void bagOfWords::setSize(int i)
 // print the bag of words in dictionary format
 void bagOfWords::display()
 {
-	cout << "Bag of Words: " << _size << endl;
-	for (int i = 0; i < _size; i++) {
-		cout << _words[i] << ": " << _frequencies[i] << endl;
+	cout << "Bag of Words: " << _size << endl; //displays the number of words in the bagOfWords
+	for (int i = 0; i < _size; i++) { //iterates through each word in bagOfWords
+		cout << _words[i] << ": " << _frequencies[i] << endl; //prints the word and its frequency
 	}
 }
 
 // sort the _words and _frequencies based on frequencies
 void bagOfWords::sortFreq()
 {
-	myString tempWord;
-	int tempFreq;
+	myString tempWord; //temporary myString to store the word to swap
+	int tempFreq; //temporary int to store the frequency to swap
 	for (int i = 0; i < _size; i++) { //bubble sort
-		for (int j = 0; j < _size - 1; j++) {
+		for (int j = 0; j < _size - 1; j++) { //iterates through arrays until the second-to-last element because of comparing an element and the one after it
 			if (_frequencies[j] == _frequencies[j+1]) { //if frequencies are equal, sort alphabetically
-				if (_words[j] > _words[j + 1]) {
-					tempWord = _words[j];
-					_words[j] = _words[j+1];
-					_words[j+1] = tempWord;
+				if (_words[j] > _words[j + 1]) { //if word at j is greater than the next word
+					tempWord = _words[j]; //temporarily stores word at j
+					_words[j] = _words[j+1]; //word at j becomes next word
+					_words[j+1] = tempWord; //word at j+1 becomes previous word
 				}
 			}
-			else if (_frequencies[j] > _frequencies[j+1]) {
-				tempWord = _words[j];
+			else if (_frequencies[j] > _frequencies[j+1]) { //if frequency at j is greater than the next frequency
+				tempWord = _words[j]; //temporarily stores word and frequency at j
 				tempFreq = _frequencies[j];
-				_words[j] = _words[j+1];
+				_words[j] = _words[j+1]; //word and frequency at j become the next word and frequency
 				_frequencies[j] = _frequencies[j+1];
-				_words[j+1] = tempWord;
+				_words[j+1] = tempWord; //word and frequency at j+1 become the previous word and frequency
 				_frequencies[j+1] = tempFreq;
 			}
 		}
@@ -332,16 +334,16 @@ void bagOfWords::sortFreq()
 // sort the _words and _frequencies, alphabetically
 void bagOfWords::sortWords()
 {
-	myString tempWord;
-	int tempFreq;
+	myString tempWord; //temporary myString to store the word to swap
+	int tempFreq; //temporary int to store the frequency to swap
 	for (int i = 0; i < _size; i++) { //bubble sort
-		for (int j = 0; j < _size - 1; j++) {
-			if (_words[j] > _words[j+1]) {
-				tempWord = _words[j];
+		for (int j = 0; j < _size - 1; j++) { //iterates through arrays until the second-to-last element because of comparing an element and the one after it
+			if (_words[j] > _words[j+1]) { //if word at j is greater than the next word
+				tempWord = _words[j]; //temporarily stores word and frequency at j
 				tempFreq = _frequencies[j];
-				_words[j] = _words[j+1];
+				_words[j] = _words[j+1]; //word and frequency at j become the next word and frequency
 				_frequencies[j] = _frequencies[j+1];
-				_words[j+1] = tempWord;
+				_words[j+1] = tempWord; //word and frequency at j+1 become the previous word and frequency
 				_frequencies[j+1] = tempFreq;
 			}
 		}
@@ -354,44 +356,44 @@ bagOfWords* bagOfWords::removeStopWords(myString* stopWords, int numStopWords)
 	bagOfWords* tempBag = new bagOfWords(_size); //temporary bag for non-stop-words
 	int newBagIdx = 0; //current index of tempBag
 
-	for (int i = 0; i < _size; i++) {
+	for (int i = 0; i < _size; i++) { //iterates through every element in current bagOfWords
 		found = false;
 		for (int j = 0; j < numStopWords; j++) { //iterate through stopWords until the end or until a stop word is found
-			if (_words[i] == stopWords[j]) {
+			if (_words[i] == stopWords[j]) { //if current word in bagOfWords is a stop word, do not add to tempBag
 				found = true;
 				break;
 			}
 		}
-		if (!found) {
-			(*tempBag)._words[newBagIdx] = _words[i];
-			(*tempBag)._frequencies[newBagIdx] = _frequencies[i];
-			newBagIdx++;
+		if (!found) { //if current word is not a stop word, add to tempBag
+			(*tempBag)._words[newBagIdx] = _words[i]; //adds current word to tempBag
+			(*tempBag)._frequencies[newBagIdx] = _frequencies[i]; //adds current frequency to tempBag
+			newBagIdx++; //next available index of tempBag
 		}
 	}
 
-	bagOfWords* bagWithoutStop = new bagOfWords(newBagIdx);
-	for (int i = 0; i < newBagIdx; i++) {
-		(*bagWithoutStop)._words[i] = (*tempBag)._words[i];
-		(*bagWithoutStop)._frequencies[i] = (*tempBag)._frequencies[i];
+	bagOfWords* bagWithoutStop = new bagOfWords(newBagIdx); //bagOfWords without stop words to return
+	for (int i = 0; i < newBagIdx; i++) { //iterates through every word and frequency in tempBag
+		(*bagWithoutStop)._words[i] = (*tempBag)._words[i]; //copies words from tempBag to bagWithoutStop
+		(*bagWithoutStop)._frequencies[i] = (*tempBag)._frequencies[i]; //copies frequencies from tempBag to bagWithoutStop
 	}
 
-	delete tempBag;
+	delete tempBag; //free up memory of tempBag
 	return bagWithoutStop;
 }
 
 // to search for a given word in _words - returns m if not found, l if found
 int bagOfWords::binarySearchAndInsert (myString& wordToFind, int l, int r)
 {
-	if (r >= l) {
+	if (r >= l) { //there is still room in the array to search
 		int m = l + ((r - l) / 2); //midpoint of array
-		if (_words[m] == wordToFind) {
+		if (_words[m] == wordToFind) { //word at midpoint is equal to wordToFind
 			return m; //word found
 		}
-		else if (_words[m] > wordToFind) {
-			return binarySearchAndInsert(wordToFind, l, m - 1);
+		else if (_words[m] > wordToFind) { //word at midpoint is greater than wordToFind
+			return binarySearchAndInsert(wordToFind, l, m - 1); //search lower half of current range
 		}
-		else if (_words[m] < wordToFind) {
-			return binarySearchAndInsert(wordToFind, m + 1, r);
+		else if (_words[m] < wordToFind) { //word at midpoint is less than wordToFind
+			return binarySearchAndInsert(wordToFind, m + 1, r); //search upper half of current range
 		}
 	}
 	return l; //word not found, insert word here
@@ -406,37 +408,37 @@ void bagOfWords::addWord(myString & newWord)
 		_size = 1;
 		_words = new myString[1];
 		_frequencies = new int[1];
-		_words[0] = newWord;
-		_frequencies[0] = 1;
+		_words[0] = newWord; //insert newWord
+		_frequencies[0] = 1; //increment frequency of newWord
 	}
-	else {
-		int insertIdx = binarySearchAndInsert(newWord, 0, _size - 1);
+	else { //at least 1 word in the bagOfWords
+		int insertIdx = binarySearchAndInsert(newWord, 0, _size - 1); //index of either the found word or index to insert a new word
 
 		if (_words[insertIdx] == newWord) { //word already in the list
-			_frequencies[insertIdx]++;
+			_frequencies[insertIdx]++; //increment frequency of found word
 		}
 		else { //new word
-			_size++;
-			myString* new_words = new myString[_size]; //temporary new arrays
+			_size++; //increment size of the bagOfWords
+			myString* new_words = new myString[_size]; //temporary new arrays to store previous words and frequencies
 			int* new_frequencies = new int[_size];
 
 			for (int i = 0; i < insertIdx; i++) { //copy values from _words and _frequencies until insertIdx
 				new_words[i] = _words[i];
 				new_frequencies[i] = _frequencies[i];
 			}
-			new_words[insertIdx] = newWord;
-			new_frequencies[insertIdx] = 1;
+			new_words[insertIdx] = newWord; //insert new word at insertIdx
+			new_frequencies[insertIdx] = 1; //increment frequency of newWord
 			if (insertIdx != (_size - 1)) { //word was not inserted at end of list
-				for (int i = insertIdx + 1; i < _size; i++) {
-					new_words[i] = _words[i - 1];
-					new_frequencies[i] = _frequencies[i - 1];
+				for (int i = insertIdx + 1; i < _size; i++) { //iterate through remaining values of previous bagOfWords
+					new_words[i] = _words[i - 1]; //copy remaining words
+					new_frequencies[i] = _frequencies[i - 1]; //copy remaining frequencies
 				}
 			}
 
 			delete [] _words; //deleting current arrays
 			delete [] _frequencies;
 
-			_words = new myString[_size];
+			_words = new myString[_size]; //new arrays with new size
 			_frequencies = new int[_size];
 			for (int i = 0; i < _size; i++) { //copying values to _words and _frequencies
 				_words[i] = new_words[i];
