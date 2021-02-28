@@ -12,14 +12,14 @@ using namespace std;
 
 // used to empty a given string A of length n
 void emptyString (char* A, int n) {
-	for (int i=0; i < n; i++) {
+	for (int i=0; i < n; i++) { //changes each char into \0
 			A[i] = '\0';
 	}
 }
 
 // copy a string A to B of length n
 void stringCopy (char* A, int n, char* B) {
-	for (int i=0; i < n; i++) {
+	for (int i=0; i < n; i++) { //copies each char from A to B
 			B[i] = A[i];
 	}
 }
@@ -68,23 +68,23 @@ myString::myString () {
 // non default constructor - initialize object with an existing string
 myString::myString (char* inpStr) {
 	int i = 0;
-	while (inpStr[i] != '\0')
+	while (inpStr[i] != '\0') //counts number of letters in parameter word
 		i++;
 	size = i;
 	strArray = new char[size];
-	emptyString (strArray, size+1);
-	for (int j=0; j < size; j++)
+	emptyString (strArray, size+1); //empties the string array
+	for (int j=0; j < size; j++) //copies letters to the string array
 		strArray[j] = inpStr[j];
 }
 
 // non default constructor - initialize object with an existing mystring object
 myString::myString (myString& B) {
-	delete [] strArray;
+	delete [] strArray; //deletes current string array
 	strArray = NULL;
 	size = B.size;
 	strArray = new char[size];
-	emptyString(strArray, size+1);
-	stringCopy (B.strArray, size, strArray);
+	emptyString(strArray, size+1); //empties the string array
+	stringCopy (B.strArray, size, strArray); //copies the string from myString B
 }
 
 char* myString::getWord()
@@ -215,18 +215,18 @@ char* getNextToken () {
 
 	char c;
 	int i = 0;
-	while (!cin.eof()) {
-		cin.get(c);
+	while (!cin.eof()) { //iterates until the end of the input
+		cin.get(c); //gets the current char
 		if (!cin.eof ()) {
-			if ((c != '\n') && (c != ' ')) {
+			if ((c != '\n') && (c != ' ')) { //if the current char is an actual letter, add to str and increment index
 				if ( ((c >= 'a') && (c <= 'z')) ||
 					 ((c >= 'A') && (c <= 'Z')) ||
 					 ((c >= '0') && (c <= '9')) )
 					str[i++] = c;
 			}
-			else if ((c == '\n') && (i > 0))
+			else if ((c == '\n') && (i > 0)) //if the character is the end of the line
 				return str;
-			else if ((c == ' ') && (i > 0))
+			else if ((c == ' ') && (i > 0)) //if the character is a white space
 				return str;
 		}
 	}
@@ -486,12 +486,12 @@ int main () {
 	//Now read a text and put them in the bagOfWords instance.
 	bagOfWords* myBag = new bagOfWords ();
 
-	token = getNextToken ();
+	token = getNextToken (); //get first word
 	while (token != NULL)
 	{
 		tokenString = new myString (token); //create a myString object with the token
 		(*myBag).addWord(*tokenString); //add token to myBag
-		token = getNextToken ();
+		token = getNextToken (); //get next word
 	}
 	// this should display the token and frequency;
 	// note that becuase you are using binary search and insert the tokens will
@@ -519,7 +519,8 @@ int main () {
 	cout << endl;
 	cout << "newBag - Sorted based on frequency:" << endl;
 	(*newBag).display ();
-
+	
+	//calling destructors
 	delete [] stopWordsList;
 	delete myBag;
 	delete newBag;
