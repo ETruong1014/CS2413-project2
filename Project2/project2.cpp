@@ -310,7 +310,7 @@ void bagOfWords::sortFreq()
 {
 	myString tempWord; //temporary myString to store the word to swap
 	int tempFreq; //temporary int to store the frequency to swap
-	for (int i = 0; i < _size; i++) { //bubble sort, sorts largest frequencies to the end per loop
+	for (int i = 0; i < _size; i++) { //bubble sort
 		for (int j = 0; j < _size - 1; j++) { //iterates through arrays until the second-to-last element because of comparing an element and the one after it
 			if (_frequencies[j] == _frequencies[j+1]) { //if frequencies are equal, sort alphabetically
 				if (_words[j] > _words[j + 1]) { //if word at j is greater than the next word
@@ -336,7 +336,7 @@ void bagOfWords::sortWords()
 {
 	myString tempWord; //temporary myString to store the word to swap
 	int tempFreq; //temporary int to store the frequency to swap
-	for (int i = 0; i < _size; i++) { //bubble sort, sorts greatest words to the end per loop
+	for (int i = 0; i < _size; i++) { //bubble sort
 		for (int j = 0; j < _size - 1; j++) { //iterates through arrays until the second-to-last element because of comparing an element and the one after it
 			if (_words[j] > _words[j+1]) { //if word at j is greater than the next word
 				tempWord = _words[j]; //temporarily stores word at j
@@ -350,10 +350,10 @@ void bagOfWords::sortWords()
 	}
 }
 
-//returns a bagOfWords without the words that are also stop words
+// returns a bagOfWords without the words that are also stop words
 bagOfWords* bagOfWords::removeStopWords(myString* stopWords, int numStopWords)
 {
-	bool found; //if stop word is found
+	bool found; //if stop word is found;
 	bagOfWords* tempBag = new bagOfWords(_size); //temporary bag for non-stop-words
 	int newBagIdx = 0; //current index of tempBag
 
@@ -386,7 +386,7 @@ bagOfWords* bagOfWords::removeStopWords(myString* stopWords, int numStopWords)
 int bagOfWords::binarySearchAndInsert (myString& wordToFind, int l, int r)
 {
 	if (r >= l) { //there is still room in the array to search
-		int m = l + ((r - l) / 2); //midpoint of range to search
+		int m = l + ((r - l) / 2); //midpoint of array
 		if (_words[m] == wordToFind) { //word at midpoint is equal to wordToFind
 			return m; //word found
 		}
