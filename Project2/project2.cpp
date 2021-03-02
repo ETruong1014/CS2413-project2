@@ -12,8 +12,8 @@ using namespace std;
 
 // used to empty a given string A of length n
 void emptyString (char* A, int n) {
-	for (int i=0; i < n; i++) { //changes each char into \0
-			A[i] = '\0';
+	for (int i=0; i < n; i++) {
+			A[i] = '\0'; //changes each char to \0
 	}
 }
 
@@ -237,7 +237,7 @@ char* getNextToken () {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class bagOfWords {
 private:
-	int binarySearchAndInsert (myString& wordToFind, int l, int r);
+	int binarySearchAndInsert (myString& wordToFind);
 	myString* _words;
 	int* _frequencies;
 	int _size;
@@ -383,21 +383,32 @@ bagOfWords* bagOfWords::removeStopWords(myString* stopWords, int numStopWords)
 }
 
 // to search for a given word in _words - returns l if not found, m if found
-int bagOfWords::binarySearchAndInsert (myString& wordToFind, int l, int r)
+int bagOfWords::binarySearchAndInsert (myString& wordToFind)
 {
-	if (r >= l) { //there is still room in the array to search
-		int m = l + ((r - l) / 2); //midpoint of array
+	bool found = false; //value to determine if word has been found
+	int l = 0; //left index of range
+	int r = _size - 1; //right index of range
+	int returnIdx = 0; //index to return
+
+	while (r >= l && !found) { //there is still room in the array to search
+		int m = l + ((r - l) / 2); //midpoint of range
 		if (_words[m] == wordToFind) { //word at midpoint is equal to wordToFind
-			return m; //word found
+			found = true; //word found
+			returnIdx = m;
 		}
 		else if (_words[m] > wordToFind) { //word at midpoint is greater than wordToFind
-			return binarySearchAndInsert(wordToFind, l, m - 1); //search lower half of current range
+			r = m - 1; //search lower half of current range
 		}
 		else if (_words[m] < wordToFind) { //word at midpoint is less than wordToFind
-			return binarySearchAndInsert(wordToFind, m + 1, r); //search upper half of current range
+			l = m + 1; //search upper half of current range
 		}
 	}
-	return l; //word not found, insert word here
+
+	if (!found) {
+		returnIdx = l; //word not found, insert word here
+	}
+
+	return returnIdx;
 }
 
 // method to add words to the bagOfWords object
@@ -413,7 +424,7 @@ void bagOfWords::addWord(myString & newWord)
 		_frequencies[0] = 1; //increment frequency of newWord
 	}
 	else { //at least 1 word in the bagOfWords
-		int insertIdx = binarySearchAndInsert(newWord, 0, _size - 1); //index of either the found word or index to insert a new word
+		int insertIdx = binarySearchAndInsert(newWord); //index of either the found word or index to insert a new word
 
 		if (_words[insertIdx] == newWord) { //word already in the list
 			_frequencies[insertIdx]++; //increment frequency of found word
@@ -519,7 +530,7 @@ int main () {
 	cout << endl;
 	cout << "newBag - Sorted based on frequency:" << endl;
 	(*newBag).display ();
-	
+
 	//calling destructors
 	delete [] stopWordsList;
 	delete myBag;
